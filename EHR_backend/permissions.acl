@@ -1,0 +1,95 @@
+/**
+ * patient access conteol
+ */
+
+rule read_own_ehr {
+    description: "Grant patient access to his own EHR"
+    participant(m): "org.example.basic.patient"
+    operation: READ
+    resource(v): "org.example.basic.EHR"
+    condition: (v.patient.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule read_doctor {
+    description: "Grant patient access to read doctor"
+    participant: "org.example.basic.patient"
+    operation: READ
+    resource: "org.example.basic.doctor"
+    action: ALLOW
+}
+
+
+
+rule read_hospital{
+	 description: "Grant patient access to read hospital"
+    participant: "org.example.basic.patient"
+    operation: READ
+    resource: "org.example.basic.hospital"
+    action: ALLOW
+
+}
+
+rule read_own {
+    description: "Grant patient access to read his own EHR"
+    participant(m): "org.example.basic.patient"
+    operation: READ
+    resource(v): "org.example.basic.patient"
+    condition: (v.getIdentifier() == m.getIdentifier())
+    action: ALLOW
+}
+
+rule patient{
+	 description: "Grant business network administrators full access to user resources"
+    participant: "org.example.basic.patient"
+    operation: ALL 
+    resource: "org.example.basic.*"
+    action: DENY
+
+}
+/**
+ * ------.
+ */
+
+
+
+
+
+rule Default{
+	 description: "Grant participants full access to user resources"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL 
+    resource: "org.example.basic.*"
+    action: ALLOW
+
+}
+
+rule systemacl{
+	 description: "Grant participants full access to user resources"
+    participant: "org.hyperledger.composer.system.Participant"
+    operation: ALL 
+    resource:"org.hyperledger.composer.system.**"
+    action: ALLOW
+
+}
+
+rule NetworkAdminUser {
+    description: "Grant business network administrators full access to user resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL 
+    resource: "**"
+    action: ALLOW
+}
+
+rule NetworkAdminSystem {
+    description: "Grant business network administrators full access to system resources"
+    participant: "org.hyperledger.composer.system.NetworkAdmin"
+    operation: ALL
+    resource: "org.hyperledger.composer.system.**"
+    action: ALLOW
+}
+
+
+
+
+
